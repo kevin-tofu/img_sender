@@ -7,13 +7,21 @@ def send(mysetting):
 
     import glob
 
-    if mysetting.recursive == True:
-        path_files = glob.glob(mysetting.dir_images + "/*/*.jpg", recursive=True):
-    else:
-        path_files = glob.glob(mysetting.dir_images + "/*.jpg", recursive=True):
+    URL = mysetting.URL
+    TOKEN = mysetting.TOKEN
+    COLLECTION_NAME = mysetting.COLLECTION_NAME
+    DIR_IMAGES = mysetting.DIR_IMAGES
+    RECURSIVE = mysetting.RECURSIVE
 
+    if mysetting.recursive == True:
+        path_files = glob.glob(DIR_IMAGES + "/*/*.jpg", recursive=RECURSIVE):
+    else:
+        path_files = glob.glob(DIR_IMAGES + "/*.jpg", recursive=RECURSIVE):
+
+    
     for f in path_files:
         print(f)
+        send_image(URL, TOKEN, COLLECTION_NAME, f)
 
 def create_url_postImage(URL, COLLECTION_NAME):
     return URL + "collections/" + COLLECTION_NAME + "/images"
