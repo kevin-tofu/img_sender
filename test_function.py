@@ -1,13 +1,20 @@
 
 
-if __name__ == '__main__':-
+if __name__ == '__main__':
     
     from main import send
+
+    url_myplace = ""
+    token_my = ""
+    collection = ""
+    path_dir1 = ""
+
     setting = {
-        "URL": "",
-        "TOKEN": "",
-        "COLLECTION_NAME":"",
-        "DIR_IMAGES": "",
+        "URL": url_myplace,
+        "TOKEN": token_my,
+        "COLLECTION_NAME": collection,
+        "DIR_IMAGES": path_dir1,
         "RECURSIVE": False
     }
+
     send(setting)

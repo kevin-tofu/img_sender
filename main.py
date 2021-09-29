@@ -7,16 +7,16 @@ def send(mysetting):
 
     import glob
 
-    URL = mysetting.URL
-    TOKEN = mysetting.TOKEN
-    COLLECTION_NAME = mysetting.COLLECTION_NAME
-    DIR_IMAGES = mysetting.DIR_IMAGES
-    RECURSIVE = mysetting.RECURSIVE
+    URL = mysetting["URL"]
+    TOKEN = mysetting["TOKEN"]
+    COLLECTION_NAME = mysetting["COLLECTION_NAME"]
+    DIR_IMAGES = mysetting["DIR_IMAGES"]
+    RECURSIVE = mysetting["RECURSIVE"]
 
-    if mysetting.recursive == True:
-        path_files = glob.glob(DIR_IMAGES + "/*/*.jpg", recursive=RECURSIVE):
+    if RECURSIVE == True:
+        path_files = glob.glob(DIR_IMAGES + "/*/*.jpg", recursive=RECURSIVE)
     else:
-        path_files = glob.glob(DIR_IMAGES + "/*.jpg", recursive=RECURSIVE):
+        path_files = glob.glob(DIR_IMAGES + "/*.jpg", recursive=RECURSIVE)
 
     
     for f in path_files:
