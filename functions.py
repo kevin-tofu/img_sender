@@ -6,6 +6,7 @@ import requests
 def send(mysetting):
 
     import glob
+    import os.path
 
     URL = mysetting["URL"]
     TOKEN = mysetting["TOKEN"]
@@ -13,20 +14,25 @@ def send(mysetting):
     DIR_IMAGES = mysetting["DIR_IMAGES"]
     RECURSIVE = mysetting["RECURSIVE"]
 
+    path_files = list()
     if RECURSIVE == True:
         path_files = glob.glob(DIR_IMAGES + "/*/*.jpg", recursive=RECURSIVE)
-    else:
-        path_files = glob.glob(DIR_IMAGES + "/*.jpg", recursive=RECURSIVE)
+    path_files += glob.glob(DIR_IMAGES + "/*.jpg", recursive=False)
 
-    
-    for f in path_files:
-        print(f)
-        send_image(URL, TOKEN, COLLECTION_NAME, f)
+    myfields = None
+    for fpath in path_files:
+        
+        dirname = os.path.dirname(fpath)
+        myfields = { 'dirname': dirname}
+
+        print(fpath, myfields)
+        res = send_image(URL, TOKEN, COLLECTION_NAME, fpath, fields=myfields)
+        print(res.text, res.ok)
 
 def create_url_postImage(URL, COLLECTION_NAME):
     return URL + "collections/" + COLLECTION_NAME + "/images"
 
-def send_image(URL, TOKEN, COLLECTION_NAME, PATH_IMG):
+def send_image(URL, TOKEN, COLLECTION_NAME, PATH_IMG, fields=None):
     
     file = { 'image': open(PATH_IMG, "rb") }
     headers = {
@@ -36,17 +42,20 @@ def send_image(URL, TOKEN, COLLECTION_NAME, PATH_IMG):
     URL_POST = create_url_postImage(URL, COLLECTION_NAME)
     print(URL_POST)
 
-    res = requests.post(url=URL_POST, headers=headers, files=file)
-
-    print(res.text, res.ok)
+    if fields is None:
+        res = requests.post(url=URL_POST, headers=headers, files=file)
+    else:
+        res = requests.post(url=URL_POST, headers=headers, files=file, fields=fields)
+    return res
+    
     
 
 if __name__ == '__main__':
 
     import argparse, json
     parser = argparse.ArgumentParser(description = 'send an image to DB')
-    parser.add_argment('--setting', '-S', default='.env.json', help = 'path for program that is .json form')
-    arg = parser.parse_arg()
+    parser.add_argument('--setting', '-S', default='.env.json', help = 'path for program that is .json form')
+    arg = parser.parse_args()
 
     try:
         with open(arg.setting, 'r') as file:
