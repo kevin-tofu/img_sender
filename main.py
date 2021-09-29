@@ -3,13 +3,9 @@
 import requests
 
 
-def main(arg):
+def send(mysetting):
 
-    import json
     import glob
-
-    with open(arg.setting, 'r') as file:
-        mysetting = json.load(file)
 
     if mysetting.recursive == True:
         path_files = glob.glob(mysetting.dir_images + "/*/*.jpg", recursive=True):
@@ -39,14 +35,15 @@ def send_image(URL, TOKEN, COLLECTION_NAME, PATH_IMG):
 
 if __name__ == '__main__':
 
-    import argparse
+    import argparse, json
     parser = argparse.ArgumentParser(description = 'send an image to DB')
-
     parser.add_argment('--setting', '-S', default='.env.json', help = 'path for program that is .json form')
     arg = parser.parse_arg()
 
     try:
-        main(arg)
+        with open(arg.setting, 'r') as file:
+            mysetting = json.load(file)
+        send(mysetting)
     except Exception as  e:
         print(e)
     finally:
